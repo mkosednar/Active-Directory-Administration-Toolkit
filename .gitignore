@@ -1,0 +1,13 @@
+# Local exports can contain personal and directory information.
+Reports/
+*.csv
+*.xlsx
+*.json
+*.html
+
+# PowerShell editor and operating system files
+*.ps1xml
+*.pssc
+*.psd1
+Thumbs.db
+Desktop.ini
