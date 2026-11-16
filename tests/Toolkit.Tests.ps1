@@ -39,6 +39,7 @@ Describe 'Initialize-ADAdministrationModule' {
 
 Describe 'Unlock-ADAccount safety' {
     BeforeEach {
+        Mock Initialize-ADAdministrationModule {}
         Mock Get-ADUser { [pscustomobject]@{ SamAccountName='test.user'; DistinguishedName='CN=Test User,OU=Users,DC=example,DC=com'; LockedOut=$true } }
         Mock Unlock-ADAccount {}
     }
