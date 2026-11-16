@@ -12,7 +12,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-Import-Module ActiveDirectory
+. (Join-Path $PSScriptRoot '..\..\Private\Initialize-ADAdministrationModule.ps1')
+Initialize-ADAdministrationModule
 $group = Get-ADGroup -Identity $GroupIdentity -Properties GroupCategory, GroupScope
 
 $memberParameters = @{ Identity = $group.DistinguishedName }

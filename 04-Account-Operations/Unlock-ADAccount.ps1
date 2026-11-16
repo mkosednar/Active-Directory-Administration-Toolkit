@@ -1,4 +1,4 @@
-[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Medium')]
+[CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
 param(
     [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
@@ -6,7 +6,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-Import-Module ActiveDirectory
+. (Join-Path $PSScriptRoot '..\..\Private\Initialize-ADAdministrationModule.ps1')
+Initialize-ADAdministrationModule
 $account = Get-ADUser -Identity $Identity -Properties LockedOut
 
 if (-not $account.LockedOut) {
