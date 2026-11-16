@@ -10,6 +10,7 @@ The scripts follow the numbered-folder style used by the Windows System Toolkit.
 - A domain joined computer or a management host with network access to the domain
 - RSAT Active Directory Domain Services tools and the `ActiveDirectory` PowerShell module
 - Read permissions for reporting scripts; delegated permissions for account operations
+- Pester 5 or later to run the automated test suite
 
 Check that the module is available:
 
@@ -68,7 +69,7 @@ Preview an account unlock, then run it after reviewing the target:
 .\04-Account-Operations\Unlock-ADAccount.ps1 -Identity 'jdoe'
 ```
 
-The unlock operation prompts for confirmation. To require confirmation every time, use `-Confirm`; to suppress the prompt in a controlled automation, pass `-Confirm:$false` explicitly.
+The unlock operation uses `SupportsShouldProcess` with high confirmation impact, so it prompts by default. Always preview with `-WhatIf` first. Use `-Confirm` to request confirmation explicitly; avoid `-Confirm:$false` unless running a reviewed, controlled automation.
 
 ## Safety and privacy
 
@@ -78,6 +79,22 @@ The unlock operation prompts for confirmation. To require confirmation every tim
 - The stale computer report is informational. It never disables or deletes accounts.
 - The unlock script only targets the identity supplied by the operator and uses PowerShell's confirmation and `-WhatIf` conventions.
 - Scripts do not contain domain names, credentials, or other environment-specific secrets.
+
+## Tests
+
+Run the Pester 5 test suite from the repository root:
+
+```powershell
+Invoke-Pester -Path .\tests -Output Detailed
+```
+
+The suite includes PowerShell parser checks and focused mocked tests. It does not replace testing against a disposable Active Directory test domain.
+
+## Operational notes
+
+- The scripts require the ActiveDirectory module; they now check that it is available and report an actionable error before importing it.
+- `Find-StaleADComputers.ps1` uses directory-maintained logon metadata. Treat results as candidates for review, not proof that a device is decommissioned.
+- Review custom `-OutputPath` destinations and protect generated reports as sensitive directory data.
 
 ## Language
 

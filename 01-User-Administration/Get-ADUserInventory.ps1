@@ -8,7 +8,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-Import-Module ActiveDirectory
+. (Join-Path $PSScriptRoot '..\..\Private\Initialize-ADAdministrationModule.ps1')
+Initialize-ADAdministrationModule
 
 $properties = @(
     'Enabled', 'LastLogonDate', 'PasswordLastSet', 'PasswordNeverExpires',
